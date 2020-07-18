@@ -5,17 +5,7 @@ final databaseReference = Firestore.instance;
 QuerySnapshot todoList;
 
 ThemeData lightTheme = ThemeData(
-  // primaryColor: Colors.white,
   unselectedWidgetColor: Colors.white,
-  // appBarTheme: AppBarTheme(
-  //   color: Colors.white,
-  //   textTheme: TextTheme(
-  //     title: TextStyle(
-  //       color: Colors.black,
-  //     ),
-  //   ),
-  //   actionsIconTheme: IconThemeData(color: Colors.black),
-  // ),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -26,9 +16,8 @@ ThemeData darkTheme = ThemeData(
   scaffoldBackgroundColor: Colors.black,
   cursorColor: Colors.white,
   accentColor: Colors.blueAccent,
-  //primaryColor: Colors.white,
   primaryTextTheme: TextTheme(
-    body1: TextStyle(
+    bodyText2: TextStyle(
       color: Colors.white,
     ),
   ),
@@ -149,8 +138,8 @@ class MyAppState extends State<MyApp> {
           child: Column(
             children: <Widget>[
               TextField(
-                style:
-                    TextStyle(color: Theme.of(context).textTheme.body1.color),
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText2.color),
                 controller: _textController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),

@@ -1,6 +1,6 @@
-# todo_mini
+# todo
 
-A flutter project on simple todo app using MongoDB in the backend for data management and mongo_dart pub package for client access of the database
+A new Flutter project.
 
 ## Getting Started
 

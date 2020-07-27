@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/pages/todo-page.dart';
+import 'package:todo/pages/todo-page.dart';
 
-void main() async {
+void main() {
   runApp(MyApp());
 }

@@ -4,33 +4,14 @@ import 'package:flutter/material.dart';
 final databaseReference = Firestore.instance;
 QuerySnapshot todoList;
 
-ThemeData lightTheme = ThemeData(
-  unselectedWidgetColor: Colors.white,
-);
-
-ThemeData darkTheme = ThemeData(
-  appBarTheme: AppBarTheme(
-    color: Colors.black,
-  ),
-  unselectedWidgetColor: Colors.white,
-  scaffoldBackgroundColor: Colors.black,
-  cursorColor: Colors.white,
-  accentColor: Colors.blueAccent,
-  primaryTextTheme: TextTheme(
-    bodyText2: TextStyle(
-      color: Colors.white,
-    ),
-  ),
-);
-
-class MyApp extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return MyAppState();
+    return HomePageState();
   }
 }
 
-class MyAppState extends State<MyApp> {
+class HomePageState extends State<HomePage> {
   TextEditingController _textController = TextEditingController();
 
   int length = 0;
@@ -113,77 +94,72 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      darkTheme: darkTheme,
-      theme: lightTheme,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Todo App'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () async {
-                var temp =
-                    await databaseReference.collection('todo').getDocuments();
-                setState(() {
-                  todoList = temp;
-                });
-              },
-            )
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Todo App'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () async {
+              var temp =
+                  await databaseReference.collection('todo').getDocuments();
+              setState(() {
+                todoList = temp;
+              });
+            },
+          )
+        ],
+        centerTitle: true,
+      ),
+      body: Container(
+        padding: EdgeInsets.only(top: 30.0, left: 30.0, right: 30.0),
+        child: Column(
+          children: <Widget>[
+            TextField(
+              style:
+                  TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
+              controller: _textController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Enter the Todo',
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+              child: RaisedButton(
+                color: Colors.blue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      'Add',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                onPressed: () async {
+                  DocumentReference ref =
+                      await databaseReference.collection('todo').add({
+                    'title': '${_textController.text}',
+                    'isDone': false,
+                  });
+                  var temp =
+                      await databaseReference.collection('todo').getDocuments();
+                  setState(() {
+                    todoList = temp;
+                  });
+                  print(ref.documentID);
+                },
+              ),
+            ),
+            cardListBuilder(),
           ],
-          centerTitle: true,
-        ),
-        body: Container(
-          padding: EdgeInsets.only(top: 30.0, left: 30.0, right: 30.0),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText2.color),
-                controller: _textController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter the Todo',
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-                child: RaisedButton(
-                  color: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
-                      Text(
-                        'Add',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  onPressed: () async {
-                    DocumentReference ref =
-                        await databaseReference.collection('todo').add({
-                      'title': '${_textController.text}',
-                      'isDone': false,
-                    });
-                    var temp = await databaseReference
-                        .collection('todo')
-                        .getDocuments();
-                    setState(() {
-                      todoList = temp;
-                    });
-                    print(ref.documentID);
-                  },
-                ),
-              ),
-              cardListBuilder(),
-            ],
-          ),
         ),
       ),
     );
